@@ -20,7 +20,7 @@ Documentação para o a API do projeto AOCS
 
 ### Autenticar acesso
 
-´POST´ /aocs/api/login
+`POST` /aocs/api/login
 
 **Campos da requisição**
 |   Campo  |    tipo    |   Obrigatorio | Descrição
@@ -48,7 +48,7 @@ senha|String|sim|Campo responsavel por armazenar a senha do usuario
 
 ### Criar novo login
 
-´POST´ /aocs/api/register
+`POST` /aocs/api/register
 
 **Campos da requisição**
 |   Campo  |    tipo    |   Obrigatorio | Descrição
@@ -78,7 +78,7 @@ confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pel
 
 ### Criar Tarefa
 
-´POST´ /aocs/api/tarefa
+`POST` /aocs/api/tarefa
 
 **Campos da requisição**
 
@@ -109,7 +109,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 ### Deletar Tarefa
 
-´DELETE´ /aocs/api/tarefa/{id}
+`DELETE` /aocs/api/tarefa/{id}
 
 
 **Exemplo de corpo da resposta**
@@ -132,7 +132,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 ### Editar Tarefa
 
-´UPDATE´ /aocs/api/tarefa/{id}
+`UPDATE` /aocs/api/tarefa/{id}
 
 
 **Campos da requisição**
@@ -165,7 +165,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 ### Listar Tarefa
 
-´GET´ /aocs/api/tarefa/
+`GET` /aocs/api/tarefa/
 
 **Exemplo de corpo da resposta**
 
@@ -196,7 +196,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 ### Coletar a tarefa
 
-´GET´ /aocs/api/tarefa/{id}
+`GET` /aocs/api/tarefa/{id}
 
 
 **Exemplo de corpo da resposta**
