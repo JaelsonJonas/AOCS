@@ -13,10 +13,10 @@ Documentação para o a API do projeto AOCS
 - Tarefas
     - [Criar](#criar-tarefa)
     - [Apagar](#deletar-tarefa)
-    - Listar
-    - Consultar
+    - [Editar](#editar-tarefa)
+    - [Listar](#listar-tarefa)
 - Timer
-    - ColetarTarefa
+    - [ColetarTarefa]()
 
 ### Autenticar acesso
 
@@ -28,7 +28,7 @@ Documentação para o a API do projeto AOCS
 email|String|sim|campo reponsavel por armazenar o e-mail do usuario
 senha|String|sim|Campo responsavel por armazenar a senha do usuario
 
-**Exemplo de requisição**
+**Exemplo de payload**
 
 ```js
 {
@@ -41,8 +41,8 @@ senha|String|sim|Campo responsavel por armazenar a senha do usuario
 
 | código | descrição
 |-|-
-| 200 | usuario cadastrada com sucesso
-| 400 | campos inválidos
+| 200 | usuario/senha autenticados
+| 401 | usuario/senha invalidos
 
 
 
@@ -57,7 +57,7 @@ email|String|sim|campo reponsavel por armazenar o e-mail do usuario
 senha|String|sim|Campo responsavel por armazenar a senha do usuario
 confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pelo usuario
 
-**Exemplo de requisição**
+**Exemplo de payload**
 
 ```js
 {
@@ -71,9 +71,9 @@ confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pel
 
 | código | descrição
 |-|-
-| 201 | despesa cadastrada com sucesso
+| 200 | usuario cadastrado com sucesso
 | 400 | campos inválidos
-
+| 500 | Erro inesperado contactar o suporte
 
 
 ### Criar Tarefa
@@ -89,7 +89,7 @@ descricao|String|não|Campo responsavel por armazenar a descricao da tarefa
 data|Data|sim|campo para armazenar o a data da tarefa  
 duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
-**Exemplo de requisição**
+**Exemplo de payload**
 
 ```js
 {
@@ -99,6 +99,13 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
     "duracao":"40min"
 }
 ```
+**Códigos de Respostas**
+
+| código | descrição
+|-|-
+| 200 | tarefa criada  com sucesso
+| 400 | campos inválidos
+| 500 | Erro inesperado contactar o suporte
 
 ### Deletar Tarefa
 
@@ -114,3 +121,99 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 }
 ```
+**Códigos de Respostas**
+
+| código | descrição
+|-|-
+| 204 | tarefa deletada
+| 404 | Tarefa não encontrada
+| 500 | Erro inesperado contactar o suporte
+
+
+### Editar Tarefa
+
+´UPDATE´ /aocs/api/tarefa/{id}
+
+
+**Campos da requisição**
+|   Campo  |    tipo    |   Obrigatorio | Descrição
+|:-:|:-:|:-:|:-:
+nome|String|sim|campo reponsavel por armazenar o nome da tarefa
+descricao|String|não|Campo responsavel por armazenar a descricao da tarefa
+data|Data|sim|campo para armazenar o a data da tarefa  
+duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
+
+**Exemplo de payload**
+
+```js
+{
+    "nome":"Estudar Java",
+    "descricao":"Estudar sobre JDBC",
+    "data":"2023-03-13"
+    "duracao":"40min"
+    
+}
+```
+**Códigos de Respostas**
+
+| código | descrição
+|-|-
+| 200 | tarefa localizada
+| 404 | Tarefa não encontrada
+| 500 | Erro inesperado contactar o suporte
+
+
+### Listar Tarefa
+
+´GET´ /aocs/api/tarefa/
+
+**Exemplo de corpo da resposta**
+
+```js
+{
+    "tarefa":[
+       {
+    "nome":"Estudar Java",
+    "descricao":"Estudar sobre Anatations do JPA",
+    "data":"2023-03-05"
+    "duracao":"40min"
+    },
+    {
+    "nome":"Estudar PL/SQL",
+    "descricao":"Estudar sobre PROCEDURES e DECLARE",
+    "data":"2023-03-06"
+    "duracao":"20min"
+    }
+    ]
+}
+```
+**Códigos de Respostas**
+
+| código | descrição
+|-|-
+| 200 | tarefa coletadas
+| 500 | Erro inesperado contactar o suporte
+
+### Coletar a tarefa
+
+´GET´ /aocs/api/tarefa/{id}
+
+
+**Exemplo de corpo da resposta**
+
+```js
+{
+    "nome":"Estudar Java",
+    "descricao":"Estudar sobre JDBC",
+    "data":"2023-03-13"
+    "duracao":"40min"
+    
+}
+```
+**Códigos de Respostas**
+
+| código | descrição
+|-|-
+| 200 | tarefa localizada
+| 404 | Tarefa não encontrada
+| 500 | Erro inesperado contactar o suporte
