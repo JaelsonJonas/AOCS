@@ -145,6 +145,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 ```JSON
 {
+    "id":69,
     "nome":"Estudar Java",
     "descricao":"Estudar sobre JDBC",
     "data":"2023-03-13",
@@ -170,12 +171,14 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 {
     "tarefa": [
         {
+            "id": 69,
             "nome": "Estudar Java",
             "descricao": "Estudar sobre Anatations do JPA",
             "data": "2023-03-05",
             "duracao": "40min"
         },
         {
+            "id":6969,
             "nome": "Estudar PL/SQL",
             "descricao": "Estudar sobre PROCEDURES e DECLARE",
             "data": "2023-03-06",
@@ -199,6 +202,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 ```JSON
 {
+    "id":69,
     "nome":"Estudar Java",
     "descricao":"Estudar sobre JDBC",
     "data":"2023-03-13",
