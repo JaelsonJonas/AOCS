@@ -4,22 +4,22 @@ Documentação para o a API do projeto AOCS
 
 ## Endpoints
 
--Login
-    -Autenticar acesso
-    -Criar novo login
-    -Esqueci a senha
+- Login
+    - Autenticar acesso
+    - Criar novo login
+    - Esqueci a senha
 
--Calendario
-    -Selecionar dia da semana
+- Calendario
+    - Selecionar dia da semana
 
--Tarefas
-    -Criar
-    -Inserir
-    -Apagar
-    -Listar
-    -Consultar
--Timer
-    -ColetarTarefa
+- Tarefas
+    - Criar
+    - Inserir
+    - Apagar
+    - Listar
+    - Consultar
+- Timer
+    - ColetarTarefa
 
 ### Autenticar acesso
 
