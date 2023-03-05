@@ -130,7 +130,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 ### Editar Tarefa
 
-`UPDATE` /aocs/api/tarefa/{id}
+`PUT` /aocs/api/tarefa/{id}
 
 
 **Campos da requisição**
