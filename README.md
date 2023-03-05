@@ -16,7 +16,7 @@ Documentação para o a API do projeto AOCS
     - [Editar](#editar-tarefa)
     - [Listar](#listar-tarefa)
 - Timer
-    - [ColetarTarefa]()
+    - [ColetarTarefa](#coletar-a-tarefa)
 
 ### Autenticar acesso
 
@@ -30,7 +30,7 @@ senha|String|sim|Campo responsavel por armazenar a senha do usuario
 
 **Exemplo de payload**
 
-```js
+```JSON
 {
     "email":"jow@fiap.com.br",
     "senha":"jow6969"
@@ -43,8 +43,6 @@ senha|String|sim|Campo responsavel por armazenar a senha do usuario
 |-|-
 | 200 | usuario/senha autenticados
 | 401 | usuario/senha invalidos
-
-
 
 ### Criar novo login
 
@@ -59,7 +57,7 @@ confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pel
 
 **Exemplo de payload**
 
-```js
+```JSON
 {
     "email":"jow@fiap.com.br",
     "senha":"jow6969",
@@ -91,11 +89,11 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 **Exemplo de payload**
 
-```js
+```JSON
 {
     "nome":"Estudar Java",
     "descricao":"Estudar sobre Anatations do JPA",
-    "data":"2023-03-05"
+    "data":"2023-03-05",
     "duracao":"40min"
 }
 ```
@@ -114,7 +112,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 **Exemplo de corpo da resposta**
 
-```js
+```JSON
 {
 
     "Message":"Tarefa deletada com sucesso"
@@ -145,13 +143,12 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 **Exemplo de payload**
 
-```js
+```JSON
 {
     "nome":"Estudar Java",
     "descricao":"Estudar sobre JDBC",
-    "data":"2023-03-13"
-    "duracao":"40min"
-    
+    "data":"2023-03-13",
+    "duracao":"40min" 
 }
 ```
 **Códigos de Respostas**
@@ -169,19 +166,19 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 **Exemplo de corpo da resposta**
 
-```js
+```JSON
 {
     "tarefa":[
        {
     "nome":"Estudar Java",
     "descricao":"Estudar sobre Anatations do JPA",
-    "data":"2023-03-05"
+    "data":"2023-03-05",
     "duracao":"40min"
     },
     {
     "nome":"Estudar PL/SQL",
     "descricao":"Estudar sobre PROCEDURES e DECLARE",
-    "data":"2023-03-06"
+    "data":"2023-03-06",
     "duracao":"20min"
     }
     ]
@@ -198,18 +195,18 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 `GET` /aocs/api/tarefa/{id}
 
-
 **Exemplo de corpo da resposta**
 
-```js
+```JSON
 {
     "nome":"Estudar Java",
     "descricao":"Estudar sobre JDBC",
-    "data":"2023-03-13"
+    "data":"2023-03-13",
     "duracao":"40min"
     
 }
 ```
+
 **Códigos de Respostas**
 
 | código | descrição
