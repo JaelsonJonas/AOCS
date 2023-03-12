@@ -1,42 +1,58 @@
 package br.com.fiap.aocs.models;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Tarefa {
 
-    private String nome;
+    private String titulo;
     private String descricao;
-    private String duracao;
+    private LocalDate data;
+    private LocalTime duracao;
 
-      
-    public Tarefa(String nome, String descricao, String duracao){
-        this.nome = nome;
+    public Tarefa(){
+
+    }
+
+    public Tarefa(String titulo, String descricao, LocalDate data, LocalTime duracao) {
+        this.titulo = titulo;
         this.descricao = descricao;
+        this.data = data;
         this.duracao = duracao;
     }
 
-
-    public String getNome(){
-        return nome;
+    public String getNome() {
+        return titulo;
     }
 
-    public void setNome(String nome){
-        this.nome = nome;
+    public void setNome(String titulo) {
+        this.titulo = titulo;
     }
 
-
-    public String getDescricao(){
+    public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao){
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 
-    public String getDuracao(){
+    public LocalDate getData() {
+        return data;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
+
+    public LocalTime getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(String duracao){
+    public void setDuracao(LocalTime duracao) {
         this.duracao = duracao;
     }
+
+    
+    
 }
