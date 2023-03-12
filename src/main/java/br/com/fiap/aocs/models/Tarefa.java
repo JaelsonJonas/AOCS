@@ -21,7 +21,7 @@ public class Tarefa {
         this.duracao = duracao;
     }
 
-    public String getNome() {
+    public String getTitulo() {
         return titulo;
     }
 
