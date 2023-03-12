@@ -25,7 +25,7 @@ public class Tarefa {
         return titulo;
     }
 
-    public void setNome(String titulo) {
+    public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
 
