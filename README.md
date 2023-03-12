@@ -15,6 +15,7 @@ Documentação para o a API do projeto AOCS
     - [Apagar](#deletar-tarefa)
     - [Editar](#editar-tarefa)
     - [Listar](#listar-tarefa)
+
 - Timer
     - [ColetarTarefa](#coletar-a-tarefa)
 
@@ -58,6 +59,7 @@ confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pel
 **Exemplo de payload**
 
 ```JSON
+
 {
     "email":"jow@fiap.com.br",
     "senha":"jow6969",
@@ -90,12 +92,14 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 **Exemplo de payload**
 
 ```JSON
+
 {
     "nome":"Estudar Java",
     "descricao":"Estudar sobre Anatations do JPA",
     "data":"2023-03-05",
     "duracao":"40min"
 }
+
 ```
 **Códigos de Respostas**
 
@@ -113,11 +117,14 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 **Exemplo de corpo da resposta**
 
 ```JSON
+
 {
 
     "Message":"Tarefa deletada com sucesso"
 
 }
+
+
 ```
 **Códigos de Respostas**
 

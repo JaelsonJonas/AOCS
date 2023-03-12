@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Usuario {
 
+    private Integer id;
     private Login login;
     private List<Tarefa> tarefas;
 
@@ -11,9 +12,18 @@ public class Usuario {
 
     }
 
-    public Usuario(Login login, List<Tarefa> tarefas) {
+    public Usuario(Integer id,Login login, List<Tarefa> tarefas) {
+        this.id = id;
         this.login = login;
         this.tarefas = tarefas;
+    }
+
+    public Integer getId(){
+        return id;
+    }
+
+    public void setId(Integer id){
+        this.id = id;
     }
 
     public Login getLogin() {
