@@ -21,19 +21,19 @@ Documentação para o a API do projeto AOCS
 
 ### Autenticar acesso
 
-`POST` /aocs/api/login
+`POST` /aocs/api/usuario
 
 **Campos da requisição**
 |   Campo  |    tipo    |   Obrigatorio | Descrição
 |:-:|:-:|:-:|:-:
-email|String|sim|campo reponsavel por armazenar o e-mail do usuario
+login|String|sim|campo reponsavel por armazenar o e-mail do usuario
 senha|String|sim|Campo responsavel por armazenar a senha do usuario
 
 **Exemplo de payload**
 
 ```JSON
 {
-    "email":"jow@fiap.com.br",
+    "login":"jow@fiap.com.br",
     "senha":"jow6969"
 }
 
