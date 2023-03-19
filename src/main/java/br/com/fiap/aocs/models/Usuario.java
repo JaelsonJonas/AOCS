@@ -20,7 +20,7 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Usuario(Integer id,String login, String senha, List<Tarefa> tarefas) {
+    public Usuario(Integer id,String login, String senha, List<Tarefa> tarefas){
         this.id = id;
         this.login = login;
         this.senha = senha;
