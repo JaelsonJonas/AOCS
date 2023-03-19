@@ -38,8 +38,6 @@ public class TarefaController {
 
         System.out.println(tarefa);
 
-              
-
         tarefa.setId(tarefas.size() + 1);
         tarefas.add(tarefa);
 
