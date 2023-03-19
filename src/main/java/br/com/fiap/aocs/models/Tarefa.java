@@ -15,6 +15,10 @@ public class Tarefa {
 
     }
 
+    public Tarefa(String descricao) {
+        this.descricao = descricao;
+    }
+
     public Tarefa(Integer id, String titulo, String descricao, LocalDate data, LocalTime duracao) {
         this.id = id;
         this.titulo = titulo;

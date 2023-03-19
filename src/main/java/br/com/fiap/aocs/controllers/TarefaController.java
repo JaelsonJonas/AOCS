@@ -7,9 +7,11 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -47,5 +49,41 @@ public class TarefaController {
             return ResponseEntity.ok(taferaConteiner.get());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @DeleteMapping("api/tarefa/{id}")
+    public ResponseEntity<Tarefa> deleteWithId(@PathVariable Integer id) {
+
+        // Tarefa deletado = new Tarefa("Tarefa Deletada com sucesso");
+
+        Optional<Tarefa> taferaConteiner = tarefas.stream().filter((Tarefa t) -> t.getId().equals(id)).findFirst();
+
+        if (taferaConteiner.isPresent()) {
+            tarefas.remove(taferaConteiner.get());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PutMapping("api/tarefa/{id}")
+    public ResponseEntity<Tarefa> updateWithId(@PathVariable Integer id, @RequestBody Tarefa update) {
+
+        Optional<Tarefa> taferaConteiner = tarefas.stream().filter((Tarefa t) -> t.getId().equals(id)).findFirst();
+
+        if (taferaConteiner.isPresent()) {
+            for (Tarefa t : tarefas) {
+                if (t.getId() == id) {
+                    t.setData(update.getData());
+                    t.setDescricao(update.getDescricao());
+                    t.setDuracao(update.getDuracao());
+                    t.setTitulo(update.getTitulo());
+                    return ResponseEntity.status(HttpStatus.OK).body(t);
+
+                }
+            }
+
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

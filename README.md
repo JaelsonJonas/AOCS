@@ -26,14 +26,14 @@ Documentação para o a API do projeto AOCS
 **Campos da requisição**
 |   Campo  |    tipo    |   Obrigatorio | Descrição
 |:-:|:-:|:-:|:-:
-email|String|sim|campo reponsavel por armazenar o e-mail do usuario
+login|String|sim|campo reponsavel por armazenar o e-mail do usuario
 senha|String|sim|Campo responsavel por armazenar a senha do usuario
 
 **Exemplo de payload**
 
 ```JSON
 {
-    "email":"jow@fiap.com.br",
+    "login":"jow@fiap.com.br",
     "senha":"jow6969"
 }
 
@@ -94,10 +94,10 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 ```JSON
 
 {
-    "nome":"Estudar Java",
+    "titulo":"Estudar Java",
     "descricao":"Estudar sobre Anatations do JPA",
     "data":"2023-03-05",
-    "duracao":"40min"
+    "duracao":"00:40"
 }
 
 ```
