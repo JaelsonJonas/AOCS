@@ -23,6 +23,10 @@ public class TarefaController {
 
     private List<Tarefa> tarefas = new ArrayList<Tarefa>();
 
+    public ResponseEntity<Tarefa> NotFound() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
     @GetMapping("/api/tarefa")
     public List<Tarefa> listAll() {
 
@@ -31,6 +35,11 @@ public class TarefaController {
 
     @PostMapping("api/tarefa")
     public ResponseEntity<Tarefa> create(@RequestBody Tarefa tarefa, UriComponentsBuilder uriCompBuilder) {
+
+        System.out.println(tarefa);
+
+              
+
         tarefa.setId(tarefas.size() + 1);
         tarefas.add(tarefa);
 
@@ -48,7 +57,7 @@ public class TarefaController {
         if (taferaConteiner.isPresent())
             return ResponseEntity.ok(taferaConteiner.get());
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return NotFound();
     }
 
     @DeleteMapping("api/tarefa/{id}")
@@ -63,7 +72,7 @@ public class TarefaController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return NotFound();
     }
 
     @PutMapping("api/tarefa/{id}")
