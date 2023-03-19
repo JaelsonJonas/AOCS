@@ -5,16 +5,25 @@ import java.util.List;
 public class Usuario {
 
     private Integer id;
-    private Login login;
+    private String login;
+    private String senha;
     private List<Tarefa> tarefas;
 
     public Usuario() {
 
     }
 
-    public Usuario(Integer id,Login login, List<Tarefa> tarefas) {
+
+    
+    public Usuario(String login, String senha){
+        this.login = login;
+        this.senha = senha;
+    }
+
+    public Usuario(Integer id,String login, String senha, List<Tarefa> tarefas) {
         this.id = id;
         this.login = login;
+        this.senha = senha;
         this.tarefas = tarefas;
     }
 
@@ -26,16 +35,24 @@ public class Usuario {
         this.id = id;
     }
 
-    public Login getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public void setLogin(Login login) {
+    public void setLogin(String login) {
         this.login = login;
     }
 
     public List<Tarefa> getTarefas() {
         return tarefas;
+    }
+
+    public void setSenha(String senha){
+        this.senha = senha;
+    }
+
+    public String getSenha(){
+        return senha;
     }
 
     public void setTarefas(List<Tarefa> taferas) {
