@@ -8,7 +8,7 @@ Documentação para o a API do projeto AOCS
     - [Autenticar acesso](#autenticar-acesso)
 
 - Novo Usuario
-    - [Criar novo login](#criar-novo-login)
+    - [Criar novo usuario](#criar-novo-usuario)
 
 - Tarefas
     - [Criar](#criar-tarefa)
@@ -45,7 +45,7 @@ senha|String|sim|Campo responsavel por armazenar a senha do usuario
 | 200 | usuario/senha autenticados
 | 401 | usuario/senha invalidos
 
-### Criar novo login
+### Criar novo usuario
 
 `POST` /aocs/api/register
 
@@ -87,7 +87,7 @@ confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pel
 nome|String|sim|campo reponsavel por armazenar o nome da tarefa
 descricao|String|não|Campo responsavel por armazenar a descricao da tarefa
 data|Data|sim|campo para armazenar o a data da tarefa  
-duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
+duracao|LocalDate|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 **Exemplo de payload**
 
@@ -146,7 +146,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
 nome|String|sim|campo reponsavel por armazenar o nome da tarefa
 descricao|String|não|Campo responsavel por armazenar a descricao da tarefa
 data|Data|sim|campo para armazenar o a data da tarefa  
-duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
+duracao|LocalDate|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 **Exemplo de payload**
 
@@ -156,7 +156,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
     "nome":"Estudar Java",
     "descricao":"Estudar sobre JDBC",
     "data":"2023-03-13",
-    "duracao":"40min" 
+    "duracao":"00:40" 
 }
 ```
 **Códigos de Respostas**
@@ -182,14 +182,14 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
             "nome": "Estudar Java",
             "descricao": "Estudar sobre Anatations do JPA",
             "data": "2023-03-05",
-            "duracao": "40min"
+            "duracao": "00:40"
         },
         {
             "id":6969,
             "nome": "Estudar PL/SQL",
             "descricao": "Estudar sobre PROCEDURES e DECLARE",
             "data": "2023-03-06",
-            "duracao": "20min"
+            "duracao": "00:20"
         }
     ]
 }
@@ -213,7 +213,7 @@ duracao|Datetime|sim|campo responsavel por armazenar tempo de duracao da tarefa
     "nome":"Estudar Java",
     "descricao":"Estudar sobre JDBC",
     "data":"2023-03-13",
-    "duracao":"40min"
+    "duracao":"00:40"
     
 }
 ```

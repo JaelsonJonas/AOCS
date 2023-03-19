@@ -53,6 +53,7 @@ public class UsuarioController {
         if (usuarioConteiner.isPresent())
             return ResponseEntity.ok(usuarioConteiner.get());
 
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
     }
