@@ -21,7 +21,7 @@ Documentação para o a API do projeto AOCS
 
 ### Autenticar acesso
 
-`POST` /aocs/api/usuario
+`POST` /aocs/api/login
 
 **Campos da requisição**
 |   Campo  |    tipo    |   Obrigatorio | Descrição
