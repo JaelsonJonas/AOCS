@@ -5,40 +5,56 @@ import java.util.List;
 public class Usuario {
 
     private Integer id;
-    private Login login;
+    private String login;
+    private String senha;
     private List<Tarefa> tarefas;
 
     public Usuario() {
 
     }
 
-    public Usuario(Integer id,Login login, List<Tarefa> tarefas) {
-        this.id = id;
+    public Usuario(String login, String senha) {
         this.login = login;
-        this.tarefas = tarefas;
+        this.senha = senha;
     }
 
-    public Integer getId(){
+    public Usuario(Integer id, String login, String senha, List<Tarefa> tarefa) {
+        this.id = id;
+        this.login = login;
+        this.senha = senha;
+        this.tarefas = tarefa;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id){
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Login getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public void setLogin(Login login) {
+    public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public List<Tarefa> getTarefas() {
         return tarefas;
     }
 
-    public void setTarefas(List<Tarefa> taferas) {
-        this.tarefas = taferas;
+    public void setTarefas(List<Tarefa> tarefas) {
+        this.tarefas = tarefas;
     }
+
 }
