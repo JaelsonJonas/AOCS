@@ -94,7 +94,7 @@ duracao|LocalDate|sim|campo responsavel por armazenar tempo de duracao da tarefa
 ```JSON
 
 {
-    "nome":"Estudar Java",
+    "titulo":"Estudar Java",
     "descricao":"Estudar sobre Anatations do JPA",
     "data":"2023-03-05",
     "duracao":"00:40"

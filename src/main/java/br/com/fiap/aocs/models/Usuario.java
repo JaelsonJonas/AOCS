@@ -12,9 +12,7 @@ public class Usuario {
     public Usuario() {
 
     }
-
-
-    
+ 
     public Usuario(String login, String senha){
         this.login = login;
         this.senha = senha;
@@ -27,11 +25,11 @@ public class Usuario {
         this.tarefas = tarefas;
     }
 
-    public Integer getId(){
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id){
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -43,10 +41,21 @@ public class Usuario {
         this.login = login;
     }
 
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
     public List<Tarefa> getTarefas() {
         return tarefas;
     }
 
+    public void setTarefas(List<Tarefa> tarefas) {
+        this.tarefas = tarefas;
+        
     public void setSenha(String senha){
         this.senha = senha;
     }
@@ -55,7 +64,6 @@ public class Usuario {
         return senha;
     }
 
-    public void setTarefas(List<Tarefa> taferas) {
-        this.tarefas = taferas;
     }
+
 }
