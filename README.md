@@ -8,7 +8,7 @@ Documentação para o a API do projeto AOCS
     - [Autenticar acesso](#autenticar-acesso)
 
 - Novo Usuario
-    - [Criar novo login](#criar-novo-login)
+    - [Criar novo usuario](#criar-novo-usuario)
 
 - Tarefas
     - [Criar](#criar-tarefa)
@@ -45,7 +45,7 @@ senha|String|sim|Campo responsavel por armazenar a senha do usuario
 | 200 | usuario/senha autenticados
 | 401 | usuario/senha invalidos
 
-### Criar novo login
+### Criar novo usuario
 
 `POST` /aocs/api/register
 
