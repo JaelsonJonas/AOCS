@@ -12,13 +12,13 @@ public class Usuario {
     public Usuario() {
 
     }
- 
-    public Usuario(String login, String senha){
+
+    public Usuario(String login, String senha) {
         this.login = login;
         this.senha = senha;
     }
 
-    public Usuario(Integer id,String login, String senha, List<Tarefa> tarefas){
+    public Usuario(Integer id, String login, String senha, List<Tarefa> tarefas) {
         this.id = id;
         this.login = login;
         this.senha = senha;
@@ -55,14 +55,6 @@ public class Usuario {
 
     public void setTarefas(List<Tarefa> tarefas) {
         this.tarefas = tarefas;
-        
-    public void setSenha(String senha){
-        this.senha = senha;
-    }
-
-    public String getSenha(){
-        return senha;
-    }
 
     }
 
