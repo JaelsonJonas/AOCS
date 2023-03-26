@@ -3,13 +3,39 @@ package br.com.fiap.aocs.models;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "T_AOCS_TAREFA")
 public class Tarefa {
 
-    private Integer id;
+    @Id
+    @Column(name = "ID_TAREFA")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "NM_TAREFA", nullable = false,length = 50)
     private String titulo;
+
+    @Column(name = "DS_TAREFA", length = 300)
     private String descricao;
+
+    @Column(name = "DT_TAREFA", nullable = false)
     private LocalDate data;
+
+    @Column(name = "HR_TAREFA", nullable = false)
     private LocalTime duracao;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_USUARIO")
+    private Usuario usuario;
 
     public Tarefa() {
 
@@ -19,7 +45,7 @@ public class Tarefa {
         this.descricao = descricao;
     }
 
-    public Tarefa(Integer id, String titulo, String descricao, LocalDate data, LocalTime duracao) {
+    public Tarefa(Long id, String titulo, String descricao, LocalDate data, LocalTime duracao) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -27,11 +53,11 @@ public class Tarefa {
         this.duracao = duracao;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

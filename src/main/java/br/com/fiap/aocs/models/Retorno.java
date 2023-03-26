@@ -1,14 +1,14 @@
-// package br.com.fiap.aocs.models;
+package br.com.fiap.aocs.models;
 
-// public class Retorno {
-//     private String message;
+public class Retorno {
+    private String message;
 
-//     public Retorno(String retorno){
-//         message = retorno;
-//     }
+    public Retorno(String message){
+        this.message = message;
+    }
 
-//     public String getMessage(){
-//         return message;
-//     }
+    public String getMessage(){
+        return message;
+    }
 
-// }
+}

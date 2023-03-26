@@ -1,60 +1,71 @@
 package br.com.fiap.aocs.controllers;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.aocs.models.Tarefa;
 import br.com.fiap.aocs.models.Usuario;
+import br.com.fiap.aocs.repository.UsuarioRepository;
 
 @RestController
 public class UsuarioController {
 
-    List<Usuario> usuarios = new ArrayList<Usuario>();
+    // List<Usuario> usuarios = new ArrayList<Usuario>();
+    @Autowired
+    private UsuarioRepository repository;
 
-    @GetMapping("/api/usuario")
-    public Usuario retorna() {
 
-        List<Tarefa> listaJow = new ArrayList<Tarefa>();
-        listaJow.add(new Tarefa(69, "Estudar Java", "Estudando JPA com Hibernate", LocalDate.parse("2023-03-13"),
-                LocalTime.parse("00:40")));
-        listaJow.add(new Tarefa(6969, "Estudar PL/SQL", "Estudando PL/SQL com o Z", LocalDate.parse("2023-03-13"),
-                LocalTime.parse("00:15")));
+    @GetMapping("api/usuarios")
+    public List<Usuario> getAllUsers(){
 
-        return new Usuario(69, "jow@jow.com.br", "senha6969", listaJow);
+        return repository.findAll();
+    }
+
+    @GetMapping("/api/usuario/{id}")
+    public ResponseEntity<Usuario> returnWithId(@PathVariable Integer id) {
+
+           Optional<Usuario> usuarioContainer = repository.findById(id);
+
+           if (usuarioContainer.isPresent()){
+            
+            return ResponseEntity.ok().body(usuarioContainer.get());
+
+           }
+
+           return ResponseEntity.notFound().build();
 
     }
 
     @PostMapping("api/register")
-    public ResponseEntity<Usuario> inserir(@RequestBody Usuario u) {
-        u.setId(usuarios.size() + 1);
-        usuarios.add(u);
+    public ResponseEntity<Usuario> inserir(@RequestBody Usuario newUser) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(u);
+        //validar se o login ja existe, se sim retornar que não é possivel gerar esse login
+    
+        repository.save(newUser);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
 
     }
 
     @PostMapping("api/login")
     public ResponseEntity<Usuario> postMethodName(@RequestBody Usuario u) {
-        Optional<Usuario> usuarioConteiner = usuarios.stream()
-                .filter((Usuario usuario) -> (usuario.getLogin().equals(u.getLogin()))
-                        && (usuario.getSenha().equals(u.getSenha())))
-                .findFirst();
+      
+      
+        Optional<Usuario> usuarioConteiner = repository.findByLoginAndSenha(u.getLogin(), u.getSenha());
 
-        if (usuarioConteiner.isPresent())
-            return ResponseEntity.ok(usuarioConteiner.get());
+        if(usuarioConteiner.isPresent()){
+            return ResponseEntity.ok().body(usuarioConteiner.get());
+        }
 
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.notFound().build();
 
     }
 
