@@ -43,7 +43,7 @@ senha|String|sim|Campo responsavel por armazenar a senha do usuario
 | código | descrição
 |-|-
 | 200 | usuario/senha autenticados
-| 401 | usuario/senha invalidos
+| 404 | usuario/senha invalidos
 
 ### Criar novo usuario
 
@@ -62,8 +62,7 @@ confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pel
 
 {
     "email":"jow@fiap.com.br",
-    "senha":"jow6969",
-    "confirmarSenha":"jow6969"
+    "senha":"jow6969"
 }
 
 ```
