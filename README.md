@@ -130,7 +130,7 @@ duracao|LocalDate|sim|campo responsavel por armazenar tempo de duracao da tarefa
 
 | código | descrição
 |-|-
-| 204 | tarefa deletada
+| 200 | tarefa deletada
 | 404 | Tarefa não encontrada
 | 500 | Erro inesperado contactar o suporte
 

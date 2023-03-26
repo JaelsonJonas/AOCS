@@ -2,11 +2,30 @@ package br.com.fiap.aocs.models;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "T_AOCS_USUARIO")
 public class Usuario {
 
+    @Id
+    @Column(name = "ID_USUARIO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "DS_LOGIN", nullable = false, length = 50)
     private String login;
+    
+    @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
+
+    @OneToMany(mappedBy = "usuario")
     private List<Tarefa> tarefas;
 
     public Usuario() {
