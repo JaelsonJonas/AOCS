@@ -17,11 +17,11 @@ public class Usuario {
     @Id
     @Column(name = "ID_USUARIO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "DS_LOGIN", nullable = false, length = 50)
     private String login;
-    
+
     @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
 
@@ -37,18 +37,18 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Usuario(Integer id, String login, String senha, List<Tarefa> tarefas) {
+    public Usuario(Long id, String login, String senha, List<Tarefa> tarefas) {
         this.id = id;
         this.login = login;
         this.senha = senha;
         this.tarefas = tarefas;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
