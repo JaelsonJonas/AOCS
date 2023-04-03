@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.fiap.aocs.models.Retorno;
+import br.com.fiap.aocs.models.RestValidationError;
 import br.com.fiap.aocs.models.Tarefa;
 import br.com.fiap.aocs.repository.TarefaRepository;
+import jakarta.validation.Valid;
 
 @RestController
 public class TarefaController {
@@ -34,7 +35,7 @@ public class TarefaController {
     }
 
     @PostMapping("api/tarefa")
-    public ResponseEntity<Tarefa> create(@RequestBody Tarefa tarefa, UriComponentsBuilder uriCompBuilder) {
+    public ResponseEntity<Tarefa> create(@RequestBody @Valid Tarefa tarefa, UriComponentsBuilder uriCompBuilder) {
 
         repository.save(tarefa);
         // repository.save(tarefa);
@@ -57,9 +58,9 @@ public class TarefaController {
     }
 
     @DeleteMapping("api/tarefa/{id}")
-    public ResponseEntity<Retorno> deleteWithId(@PathVariable Integer id) {
+    public ResponseEntity<RestValidationError> deleteWithId(@PathVariable  Integer id) {
 
-        Retorno retorno = new Retorno("Tarefa removida com sucesso!");
+        RestValidationError retorno = new RestValidationError("Tarefa removida com sucesso!");
 
         Optional<Tarefa> taferaConteiner = repository.findById(id);
 
@@ -87,4 +88,9 @@ public class TarefaController {
 
         return ResponseEntity.notFound().build();
     }
+
+    // private Tarefa getTarefa(Integer id) {
+    // return repository.findById(id)
+    // .orElseThrow(() -> new RestNotFoundException("Tarefa não encontrada"));
+    // }
 }

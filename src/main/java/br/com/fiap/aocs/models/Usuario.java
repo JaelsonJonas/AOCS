@@ -9,6 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "T_AOCS_USUARIO")
@@ -19,13 +22,17 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Login ou senha invalidos")
+    @Size(max = 50)
+    @Email
     @Column(name = "DS_LOGIN", nullable = false, length = 50)
     private String login;
 
+    @NotBlank(message = "Login ou senha invalidos")
     @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany
     private List<Tarefa> tarefas;
 
     public Usuario() {

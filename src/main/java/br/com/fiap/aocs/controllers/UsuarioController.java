@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.fiap.aocs.models.Retorno;
+import br.com.fiap.aocs.models.ReturnAPI;
 import br.com.fiap.aocs.models.Usuario;
 import br.com.fiap.aocs.repository.UsuarioRepository;
+import jakarta.validation.Valid;
 
 @RestController
 public class UsuarioController {
@@ -38,37 +39,34 @@ public class UsuarioController {
         Optional<Usuario> usuarioContainer = repository.findById(id);
 
         if (usuarioContainer.isPresent()) {
-
             return ResponseEntity.ok().body(usuarioContainer.get());
-
         }
-
         return ResponseEntity.notFound().build();
-
     }
 
     @PostMapping("api/register")
-    public ResponseEntity<Retorno> register(@RequestBody Usuario newUser, UriComponentsBuilder uriCompBuilder) {
+    public ResponseEntity<ReturnAPI> register(@RequestBody @Valid Usuario newUser,
+            UriComponentsBuilder uriCompBuilder) {
 
+                newUser.setLogin(newUser.getLogin().toLowerCase());
         // validar se o login ja existe, se sim retornar que não é possivel gerar esse
         // login
-        ExampleMatcher em = ExampleMatcher.matching().
-        
-                withMatcher("DS_LOGIN",
+        ExampleMatcher em = ExampleMatcher.matching().withMatcher("DS_LOGIN",
                 ExampleMatcher.GenericPropertyMatchers.exact());
         Example<Usuario> criterioDeBusca = Example.of(newUser, em);
 
         Optional<Usuario> optUsr = repository.findOne(criterioDeBusca);
 
         if (optUsr.isPresent()) {
-            return ResponseEntity.badRequest().body(new Retorno("Desculpe, login já em uso. Por favor, tente outro."));
+            return ResponseEntity.badRequest()
+                    .body(new ReturnAPI("Desculpe, login já em uso. Por favor, tente outro."));
         }
 
         repository.save(newUser);
 
         URI uri = uriCompBuilder.path("api/usuario/{id}").buildAndExpand(newUser.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new Retorno("Usuario criado com sucesso!"));
+        return ResponseEntity.created(uri).body(new ReturnAPI("Usuario cadastrado com sucesso!!"));
 
         // repository.save(newUser);
 
@@ -77,12 +75,12 @@ public class UsuarioController {
     }
 
     @PostMapping("api/login")
-    public ResponseEntity<Usuario> postMethodName(@RequestBody Usuario u) {
+    public ResponseEntity<ReturnAPI> postMethodName(@RequestBody Usuario u) {
 
         Optional<Usuario> usuarioConteiner = repository.findByLoginAndSenha(u.getLogin(), u.getSenha());
 
         if (usuarioConteiner.isPresent()) {
-            return ResponseEntity.ok().body(usuarioConteiner.get());
+            return ResponseEntity.ok().body(new ReturnAPI("Login realizado com sucesso!!"));
         }
 
         return ResponseEntity.notFound().build();
