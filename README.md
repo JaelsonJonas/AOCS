@@ -70,7 +70,7 @@ confirmarSenha|String|sim|Campo responsavel por armazenar a senha confirmada pel
 
 | código | descrição
 |-|-
-| 200 | usuario cadastrado com sucesso
+| 201 | usuario cadastrado com sucesso
 | 400 | campos inválidos
 | 500 | Erro inesperado contactar o suporte
 

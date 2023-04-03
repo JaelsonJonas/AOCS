@@ -9,6 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "T_AOCS_USUARIO")
@@ -17,15 +20,20 @@ public class Usuario {
     @Id
     @Column(name = "ID_USUARIO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
+    @NotBlank(message = "Login ou senha invalidos")
+    @Size(max = 50)
+    @Email
     @Column(name = "DS_LOGIN", nullable = false, length = 50)
     private String login;
-    
+
+    @NotBlank(message = "Login ou senha invalidos")
+    @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
     @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany
     private List<Tarefa> tarefas;
 
     public Usuario() {
@@ -37,18 +45,18 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Usuario(Integer id, String login, String senha, List<Tarefa> tarefas) {
+    public Usuario(Long id, String login, String senha, List<Tarefa> tarefas) {
         this.id = id;
         this.login = login;
         this.senha = senha;
         this.tarefas = tarefas;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
