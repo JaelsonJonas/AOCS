@@ -2,7 +2,6 @@ package br.com.fiap.aocs.controllers;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,82 +14,66 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.fiap.aocs.models.RestValidationError;
+import br.com.fiap.aocs.exceptions.RestNotFoundException;
+import br.com.fiap.aocs.models.ReturnAPI;
 import br.com.fiap.aocs.models.Tarefa;
 import br.com.fiap.aocs.repository.TarefaRepository;
 import jakarta.validation.Valid;
 
-@RestController
+@RestController("/api/tarefa")
 public class TarefaController {
 
-    // private List<Tarefa> tarefas = new ArrayList<Tarefa>();
-
     @Autowired
-    private TarefaRepository repository;// injetando o repositorio
+    private TarefaRepository repository;
 
-    @GetMapping("/api/tarefa")
+
+    @GetMapping
     public List<Tarefa> listAll() {
 
         return repository.findAll();
     }
 
-    @PostMapping("api/tarefa")
+    @PostMapping
     public ResponseEntity<Tarefa> create(@RequestBody @Valid Tarefa tarefa, UriComponentsBuilder uriCompBuilder) {
 
         repository.save(tarefa);
-        // repository.save(tarefa);
 
         URI uri = uriCompBuilder.path("api/tarefa/{id}").buildAndExpand(tarefa.getId()).toUri();
 
         return ResponseEntity.created(uri).body(tarefa);
-        // return ResponseEntity.status(HttpStatus.CREATED).body(tarefa);
+
     }
 
-    @GetMapping("api/tarefa/{id}")
-    public ResponseEntity<Tarefa> returnWithId(@PathVariable Integer id) {
+    @GetMapping("{id}")
+    public ResponseEntity<Tarefa> returnWithId(@PathVariable Long id) {
 
-        Optional<Tarefa> taferaConteiner = repository.findById(id);
-
-        if (taferaConteiner.isPresent())
-            return ResponseEntity.ok(taferaConteiner.get());
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(getTarefa(id));
     }
 
-    @DeleteMapping("api/tarefa/{id}")
-    public ResponseEntity<RestValidationError> deleteWithId(@PathVariable  Integer id) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<ReturnAPI> deleteWithId(@PathVariable Long id) {
 
-        RestValidationError retorno = new RestValidationError("Tarefa removida com sucesso!");
+        repository.delete(getTarefa(id));
 
-        Optional<Tarefa> taferaConteiner = repository.findById(id);
+        return ResponseEntity.ok(new ReturnAPI("Tarefa deletada"));
 
-        if (taferaConteiner.isPresent()) {
-            repository.delete(taferaConteiner.get());
-            return ResponseEntity.ok().body(retorno);
-        }
-
-        return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("api/tarefa/{id}")
-    public ResponseEntity<Tarefa> updateWithId(@PathVariable Integer id, @RequestBody Tarefa update) {
+    @PutMapping("{id}")
+    public ResponseEntity<ReturnAPI> updateWithId(@PathVariable Long id, @RequestBody @Valid Tarefa update) {
 
-        Optional<Tarefa> taferaConteiner = repository.findById(id);
+        Tarefa tarefaUpdate = getTarefa(id);
 
-        if (taferaConteiner.isPresent()) {
+        update.setId(tarefaUpdate.getId());
 
-            update.setId(taferaConteiner.get().getId());
+        repository.save(update);
 
-            repository.save(update);
+        return ResponseEntity.ok(new ReturnAPI("Tarefa atualizada com sucesso!"));
 
-            return ResponseEntity.ok().body(update);
-        }
-
-        return ResponseEntity.notFound().build();
     }
 
-    // private Tarefa getTarefa(Integer id) {
-    // return repository.findById(id)
-    // .orElseThrow(() -> new RestNotFoundException("Tarefa não encontrada"));
-    // }
+    private Tarefa getTarefa(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RestNotFoundException("Tarefa não encontrada"));
+    }
 }

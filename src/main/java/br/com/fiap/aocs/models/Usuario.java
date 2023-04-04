@@ -12,9 +12,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "T_AOCS_USUARIO")
+@Data
+@NoArgsConstructor
 public class Usuario {
 
     @Id
@@ -36,53 +40,8 @@ public class Usuario {
     @OneToMany
     private List<Tarefa> tarefas;
 
-    public Usuario() {
-
-    }
-
     public Usuario(String login, String senha) {
         this.login = login;
         this.senha = senha;
     }
-
-    public Usuario(Long id, String login, String senha, List<Tarefa> tarefas) {
-        this.id = id;
-        this.login = login;
-        this.senha = senha;
-        this.tarefas = tarefas;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public List<Tarefa> getTarefas() {
-        return tarefas;
-    }
-
-    public void setTarefas(List<Tarefa> tarefas) {
-        this.tarefas = tarefas;
-
-    }
-
 }

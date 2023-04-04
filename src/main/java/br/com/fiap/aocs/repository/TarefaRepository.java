@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.fiap.aocs.models.Tarefa;
 
-public interface TarefaRepository extends JpaRepository<Tarefa, Integer> {
+public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
 }

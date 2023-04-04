@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.fiap.aocs.exceptions.RestNotFoundException;
 import br.com.fiap.aocs.models.ReturnAPI;
 import br.com.fiap.aocs.models.Usuario;
 import br.com.fiap.aocs.repository.UsuarioRepository;
@@ -23,32 +24,25 @@ import jakarta.validation.Valid;
 @RestController
 public class UsuarioController {
 
-    // List<Usuario> usuarios = new ArrayList<Usuario>();
     @Autowired
     private UsuarioRepository repository;
 
-    @GetMapping("api/usuarios")
+    @GetMapping("api/usuario")
     public List<Usuario> getAllUsers() {
 
         return repository.findAll();
     }
 
-    @GetMapping("/api/usuario/{id}")
-    public ResponseEntity<Usuario> returnWithId(@PathVariable Integer id) {
-
-        Optional<Usuario> usuarioContainer = repository.findById(id);
-
-        if (usuarioContainer.isPresent()) {
-            return ResponseEntity.ok().body(usuarioContainer.get());
-        }
-        return ResponseEntity.notFound().build();
+    @GetMapping("api/usuario/{id}")
+    public ResponseEntity<Usuario> returnWithId(@PathVariable Long id) {
+        return ResponseEntity.ok(getUsuario(id));
     }
 
     @PostMapping("api/register")
     public ResponseEntity<ReturnAPI> register(@RequestBody @Valid Usuario newUser,
             UriComponentsBuilder uriCompBuilder) {
 
-                newUser.setLogin(newUser.getLogin().toLowerCase());
+        newUser.setLogin(newUser.getLogin().toLowerCase());
         // validar se o login ja existe, se sim retornar que não é possivel gerar esse
         // login
         ExampleMatcher em = ExampleMatcher.matching().withMatcher("DS_LOGIN",
@@ -68,10 +62,6 @@ public class UsuarioController {
 
         return ResponseEntity.created(uri).body(new ReturnAPI("Usuario cadastrado com sucesso!!"));
 
-        // repository.save(newUser);
-
-        // return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-
     }
 
     @PostMapping("api/login")
@@ -85,6 +75,10 @@ public class UsuarioController {
 
         return ResponseEntity.notFound().build();
 
+    }
+
+    private Usuario getUsuario(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RestNotFoundException("Usuario nao encontrado"));
     }
 
 }
