@@ -9,12 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "T_AOCS_USUARIO")
+@Data
+@NoArgsConstructor
 public class Usuario {
 
     @Id
@@ -36,53 +41,23 @@ public class Usuario {
     @OneToMany
     private List<Tarefa> tarefas;
 
-    public Usuario() {
-
-    }
-
     public Usuario(String login, String senha) {
         this.login = login;
         this.senha = senha;
     }
 
-    public Usuario(Long id, String login, String senha, List<Tarefa> tarefas) {
-        this.id = id;
-        this.login = login;
-        this.senha = senha;
-        this.tarefas = tarefas;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
+    public Usuario(String login) {
         this.login = login;
     }
 
-    public String getSenha() {
-        return senha;
+    public Usuario(@Valid ValidaUsuarioDTO validaUsuarioDTO) {
+        if (validaUsuarioDTO.login() != null && !validaUsuarioDTO.login().isEmpty()){
+            this.login = validaUsuarioDTO.login().toLowerCase();
+        }
+        if (validaUsuarioDTO.senha() != null && !validaUsuarioDTO.senha().isEmpty()){
+            this.senha = validaUsuarioDTO.senha();
+        }
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public List<Tarefa> getTarefas() {
-        return tarefas;
-    }
-
-    public void setTarefas(List<Tarefa> tarefas) {
-        this.tarefas = tarefas;
-
-    }
 
 }

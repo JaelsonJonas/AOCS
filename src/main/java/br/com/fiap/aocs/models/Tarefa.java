@@ -17,9 +17,13 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "T_AOCS_TAREFA")
+@Data
+@NoArgsConstructor
 public class Tarefa {
 
     @Id
@@ -50,61 +54,5 @@ public class Tarefa {
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO")
     private Usuario usuario;
-
-    public Tarefa() {
-
-    }
-
-    public Tarefa(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Tarefa(Long id, String titulo, String descricao, LocalDate data, LocalTime duracao) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.data = data;
-        this.duracao = duracao;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public LocalTime getDuracao() {
-        return duracao;
-    }
-
-    public void setDuracao(LocalTime duracao) {
-        this.duracao = duracao;
-    }
 
 }

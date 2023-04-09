@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,45 +16,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.fiap.aocs.exceptions.RestNotFoundException;
 import br.com.fiap.aocs.models.ReturnAPI;
 import br.com.fiap.aocs.models.Usuario;
+import br.com.fiap.aocs.models.ValidaUsuarioDTO;
 import br.com.fiap.aocs.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 
 @RestController
 public class UsuarioController {
 
-    // List<Usuario> usuarios = new ArrayList<Usuario>();
     @Autowired
     private UsuarioRepository repository;
 
-    @GetMapping("api/usuarios")
+    @GetMapping("api/usuario")
     public List<Usuario> getAllUsers() {
 
         return repository.findAll();
     }
 
-    @GetMapping("/api/usuario/{id}")
-    public ResponseEntity<Usuario> returnWithId(@PathVariable Integer id) {
-
-        Optional<Usuario> usuarioContainer = repository.findById(id);
-
-        if (usuarioContainer.isPresent()) {
-            return ResponseEntity.ok().body(usuarioContainer.get());
-        }
-        return ResponseEntity.notFound().build();
+    @GetMapping("api/usuario/{id}")
+    public ResponseEntity<Usuario> returnWithId(@PathVariable Long id) {
+        return ResponseEntity.ok(getUsuario(id));
     }
 
     @PostMapping("api/register")
-    public ResponseEntity<ReturnAPI> register(@RequestBody @Valid Usuario newUser,
+    public ResponseEntity<ReturnAPI> register(@RequestBody @Valid ValidaUsuarioDTO validaUsuarioDTO,
             UriComponentsBuilder uriCompBuilder) {
 
-                newUser.setLogin(newUser.getLogin().toLowerCase());
         // validar se o login ja existe, se sim retornar que não é possivel gerar esse
         // login
         ExampleMatcher em = ExampleMatcher.matching().withMatcher("DS_LOGIN",
-                ExampleMatcher.GenericPropertyMatchers.exact());
-        Example<Usuario> criterioDeBusca = Example.of(newUser, em);
+                usuario -> usuario.exact());
+        Example<Usuario> criterioDeBusca = Example.of(new Usuario(validaUsuarioDTO.login().toLowerCase()), em);
 
         Optional<Usuario> optUsr = repository.findOne(criterioDeBusca);
 
@@ -62,15 +57,13 @@ public class UsuarioController {
                     .body(new ReturnAPI("Desculpe, login já em uso. Por favor, tente outro."));
         }
 
+        Usuario newUser = new Usuario(validaUsuarioDTO);
+
         repository.save(newUser);
 
         URI uri = uriCompBuilder.path("api/usuario/{id}").buildAndExpand(newUser.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new ReturnAPI("Usuario cadastrado com sucesso!!"));
-
-        // repository.save(newUser);
-
-        // return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
 
     }
 
@@ -83,7 +76,13 @@ public class UsuarioController {
             return ResponseEntity.ok().body(new ReturnAPI("Login realizado com sucesso!!"));
         }
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ReturnAPI("Login e senha invalido"));
+
+    }
+
+    private Usuario getUsuario(Long id) {
+
+        return repository.findById(id).orElseThrow(() -> new RestNotFoundException("Usuario nao encontrado"));
 
     }
 
