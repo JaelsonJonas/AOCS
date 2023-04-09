@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -44,4 +45,19 @@ public class Usuario {
         this.login = login;
         this.senha = senha;
     }
+
+    public Usuario(String login) {
+        this.login = login;
+    }
+
+    public Usuario(@Valid ValidaUsuarioDTO validaUsuarioDTO) {
+        if (validaUsuarioDTO.login() != null && !validaUsuarioDTO.login().isEmpty()){
+            this.login = validaUsuarioDTO.login().toLowerCase();
+        }
+        if (validaUsuarioDTO.senha() != null && !validaUsuarioDTO.senha().isEmpty()){
+            this.senha = validaUsuarioDTO.senha();
+        }
+    }
+
+
 }

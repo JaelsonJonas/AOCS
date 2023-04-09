@@ -23,7 +23,7 @@ public class RestExceptionHandler {
 
     Logger log = LoggerFactory.getLogger(getClass());
 
-    @ExceptionHandler(MethodArgumentNotValidException.class) // incluir o nome da exception.class
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<RestValidationError>> MethodArgumentNotValidHandler(MethodArgumentNotValidException e) {// escre
 
         log.error("Erro de validação");
@@ -35,7 +35,7 @@ public class RestExceptionHandler {
 
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class) // incluir o nome da exception.class
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<RestValidationError> HttpMessageNotReadabledHandler(HttpMessageNotReadableException e) {// escre
 
         log.error("Erro de validação");
@@ -53,14 +53,12 @@ public class RestExceptionHandler {
                 message = "O formato deve ser HH:mm:ss";
             }
         }
-
         return ResponseEntity.badRequest().body(new RestValidationError(field, message));
-
     }
 
-    @ExceptionHandler(RestNotFoundException.class) // incluir o nome da
+    @ExceptionHandler(RestNotFoundException.class)
 
-    public ResponseEntity<ReturnAPI> RestNotFoundHandler(RestNotFoundException e) {// escre
+    public ResponseEntity<ReturnAPI> RestNotFoundHandler(RestNotFoundException e) {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ReturnAPI(e.getMessage()));
 
