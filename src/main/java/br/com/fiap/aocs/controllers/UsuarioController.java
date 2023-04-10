@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.fiap.aocs.DTO.TarefaDTO;
+import br.com.fiap.aocs.DTO.UsuarioDTO;
+import br.com.fiap.aocs.DTO.ValidaUsuarioDTO;
 import br.com.fiap.aocs.exceptions.RestNotFoundException;
 import br.com.fiap.aocs.models.ReturnAPI;
 import br.com.fiap.aocs.models.Usuario;
-import br.com.fiap.aocs.models.ValidaUsuarioDTO;
+import br.com.fiap.aocs.repository.TarefaRepository;
 import br.com.fiap.aocs.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 
@@ -29,15 +32,30 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository repository;
 
-    @GetMapping("api/usuario")
-    public List<Usuario> getAllUsers() {
+    @Autowired
+    private TarefaRepository tRepository;
 
-        return repository.findAll();
+    @GetMapping("api/usuario")
+    public List<UsuarioDTO> getAllUsers() {
+
+        return repository.findAll().stream().map(n -> new UsuarioDTO(n.getLogin(), getTarefas(n.getId()))).toList();
     }
 
     @GetMapping("api/usuario/{id}")
-    public ResponseEntity<Usuario> returnWithId(@PathVariable Long id) {
-        return ResponseEntity.ok(getUsuario(id));
+    public ResponseEntity<UsuarioDTO> returnWithId(@PathVariable Long id) {
+
+        Usuario login = getUsuario(id);
+
+        List<TarefaDTO> tarefas = getTarefas(id);
+
+        UsuarioDTO dto = new UsuarioDTO(login.getLogin(), tarefas);
+
+        return ResponseEntity.ok(dto);
+    }
+
+    private List<TarefaDTO> getTarefas(Long id) {
+        List<TarefaDTO> tarefas = tRepository.findByIdUsuario(id).stream().map(TarefaDTO::new).toList();
+        return tarefas;
     }
 
     @PostMapping("api/register")

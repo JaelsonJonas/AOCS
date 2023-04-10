@@ -2,6 +2,7 @@ package br.com.fiap.aocs.models;
 
 import java.util.List;
 
+import br.com.fiap.aocs.DTO.ValidaUsuarioDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

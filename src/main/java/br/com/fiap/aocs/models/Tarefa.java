@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -51,8 +50,7 @@ public class Tarefa {
     @Column(name = "HR_TAREFA", nullable = false)
     private LocalTime duracao;
 
-    @ManyToOne
     @JoinColumn(name = "ID_USUARIO")
-    private Usuario usuario;
+    private Long idUsuario;
 
 }
