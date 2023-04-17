@@ -14,6 +14,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +23,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "T_AOCS_USUARIO")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Usuario {
 
     @Id

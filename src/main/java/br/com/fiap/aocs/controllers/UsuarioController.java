@@ -38,7 +38,8 @@ public class UsuarioController {
     @GetMapping("api/usuario")
     public List<UsuarioDTO> getAllUsers() {
 
-        return repository.findAll().stream().map(n -> new UsuarioDTO(n.getLogin(), getTarefas(n.getId()))).toList();
+        return repository.findAll().stream().map(n -> new UsuarioDTO(n.getLogin(), getTarefas(n.getId())))
+        .toList();
     }
 
     @GetMapping("api/usuario/{id}")
@@ -51,11 +52,6 @@ public class UsuarioController {
         UsuarioDTO dto = new UsuarioDTO(login.getLogin(), tarefas);
 
         return ResponseEntity.ok(dto);
-    }
-
-    private List<TarefaDTO> getTarefas(Long id) {
-        List<TarefaDTO> tarefas = tRepository.findByIdUsuario(id).stream().map(TarefaDTO::new).toList();
-        return tarefas;
     }
 
     @PostMapping("api/register")
@@ -102,6 +98,11 @@ public class UsuarioController {
 
         return repository.findById(id).orElseThrow(() -> new RestNotFoundException("Usuario nao encontrado"));
 
+    }
+
+    private List<TarefaDTO> getTarefas(Long id) {
+        return tRepository.findByIdUsuario(id).stream().map(TarefaDTO::new).toList();
+        
     }
 
 }
