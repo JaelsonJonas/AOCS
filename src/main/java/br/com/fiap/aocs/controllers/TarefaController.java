@@ -1,6 +1,5 @@
 package br.com.fiap.aocs.controllers;
 
-import java.net.URI;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.fiap.aocs.DTO.TarefaDTO;
 import br.com.fiap.aocs.exceptions.RestNotFoundException;
@@ -35,31 +35,38 @@ public class TarefaController {
     @Autowired
     private TarefaRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
     @GetMapping
     public Page<TarefaDTO> index(@RequestParam(required = false) String titulo,
             @PageableDefault(size = 2) Pageable pageable) {
 
         if (titulo == null)
-            return repository.findAll(pageable).stream().map(t -> new TarefaDTO(t.getTitulo(),t.getDescricao(),t.getData(),t.getDuracao())).collect(Collectors.collectingAndThen(Collectors.toList(),lista -> new PageImpl<>(lista, PageRequest.of(pageable.getPageNumber(),pageable.getPageSize()), lista.size())));
+            return repository.findAll(pageable).stream()
+                    .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()))
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), lista -> new PageImpl<>(lista,
+                            PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), lista.size())));
 
-        return repository.findByTituloContaining(titulo, pageable).stream().map(t -> new TarefaDTO(t.getTitulo(),t.getDescricao(),t.getData(),t.getDuracao())).collect(Collectors.collectingAndThen(Collectors.toList(),lista -> new PageImpl<>(lista, PageRequest.of(pageable.getPageNumber(),pageable.getPageSize()), lista.size())));
+        return repository.findByTituloContaining(titulo, pageable).stream()
+                .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), lista -> new PageImpl<>(lista,
+                        PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), lista.size())));
     }
 
     @PostMapping
-    public ResponseEntity<Tarefa> create(@RequestBody @Valid Tarefa tarefa, UriComponentsBuilder uriCompBuilder) {
+    public ResponseEntity<TarefaDTO> create(@RequestBody @Valid Tarefa tarefa) {
 
         repository.save(tarefa);
 
-        URI uri = uriCompBuilder.path("api/tarefa/{id}").buildAndExpand(tarefa.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(tarefa);
+        return ResponseEntity.created(TarefaDTO.toEntityModel(tarefa).getRequiredLink("self").toUri()).body(new TarefaDTO(tarefa));
 
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Tarefa> returnWithId(@PathVariable Long id) {
+    public EntityModel<TarefaDTO> returnWithId(@PathVariable Long id) {
 
-        return ResponseEntity.ok(getTarefa(id));
+        return TarefaDTO.toEntityModel(getTarefa(id));
     }
 
     @DeleteMapping("{id}")

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,11 +40,11 @@ public class UsuarioController {
     public List<UsuarioDTO> getAllUsers() {
 
         return repository.findAll().stream().map(n -> new UsuarioDTO(n.getLogin(), getTarefas(n.getId())))
-        .toList();
+                .toList();
     }
 
     @GetMapping("api/usuario/{id}")
-    public ResponseEntity<UsuarioDTO> returnWithId(@PathVariable Long id) {
+    public EntityModel<UsuarioDTO> returnWithId(@PathVariable Long id) {
 
         Usuario login = getUsuario(id);
 
@@ -51,7 +52,7 @@ public class UsuarioController {
 
         UsuarioDTO dto = new UsuarioDTO(login.getLogin(), tarefas);
 
-        return ResponseEntity.ok(dto);
+        return dto.toEntityModel(login, dto);
     }
 
     @PostMapping("api/register")
@@ -102,7 +103,7 @@ public class UsuarioController {
 
     private List<TarefaDTO> getTarefas(Long id) {
         return tRepository.findByIdUsuario(id).stream().map(TarefaDTO::new).toList();
-        
+
     }
 
 }
