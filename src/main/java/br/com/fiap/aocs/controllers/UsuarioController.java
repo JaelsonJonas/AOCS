@@ -1,6 +1,5 @@
 package br.com.fiap.aocs.controllers;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,17 +9,19 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.fiap.aocs.DTO.TarefaDTO;
 import br.com.fiap.aocs.DTO.UsuarioDTO;
 import br.com.fiap.aocs.DTO.ValidaUsuarioDTO;
 import br.com.fiap.aocs.exceptions.RestNotFoundException;
+import br.com.fiap.aocs.models.Credencial;
 import br.com.fiap.aocs.models.ReturnAPI;
 import br.com.fiap.aocs.models.Usuario;
 import br.com.fiap.aocs.repository.TarefaRepository;
@@ -35,6 +36,12 @@ public class UsuarioController {
 
     @Autowired
     private TarefaRepository tRepository;
+
+    @Autowired
+    AuthenticationManager manager;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @GetMapping("api/usuario")
     public List<UsuarioDTO> getAllUsers() {
@@ -56,8 +63,7 @@ public class UsuarioController {
     }
 
     @PostMapping("api/register")
-    public ResponseEntity<ReturnAPI> register(@RequestBody @Valid ValidaUsuarioDTO validaUsuarioDTO,
-            UriComponentsBuilder uriCompBuilder) {
+    public ResponseEntity<Object> register(@RequestBody @Valid ValidaUsuarioDTO validaUsuarioDTO) {
 
         // validar se o login ja existe, se sim retornar que não é possivel gerar esse
         // login
@@ -74,24 +80,20 @@ public class UsuarioController {
 
         Usuario newUser = new Usuario(validaUsuarioDTO);
 
+        newUser.setSenha(encoder.encode(newUser.getSenha()));
+
         repository.save(newUser);
 
-        URI uri = uriCompBuilder.path("api/usuario/{id}").buildAndExpand(newUser.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new ReturnAPI("Usuario cadastrado com sucesso!!"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
 
     }
 
     @PostMapping("api/login")
-    public ResponseEntity<ReturnAPI> postMethodName(@RequestBody Usuario u) {
+    public ResponseEntity<Object> login(@RequestBody Credencial credencial) {
 
-        Optional<Usuario> usuarioConteiner = repository.findByLoginAndSenha(u.getLogin(), u.getSenha());
+        manager.authenticate(credencial.toAuthentication());
 
-        if (usuarioConteiner.isPresent()) {
-            return ResponseEntity.ok().body(new ReturnAPI("Login realizado com sucesso!!"));
-        }
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ReturnAPI("Login e senha invalido"));
+        return ResponseEntity.ok().build();
 
     }
 

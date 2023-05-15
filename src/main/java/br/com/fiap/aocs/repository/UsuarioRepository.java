@@ -9,5 +9,7 @@ import br.com.fiap.aocs.models.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByLoginAndSenha(String login, String senha);
+
+    Optional<Usuario> findByLogin(String email);
  
 }

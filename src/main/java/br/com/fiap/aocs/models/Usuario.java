@@ -1,6 +1,11 @@
 package br.com.fiap.aocs.models;
 
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.fiap.aocs.DTO.ValidaUsuarioDTO;
 import jakarta.persistence.Column;
@@ -25,7 +30,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @Column(name = "ID_USUARIO")
@@ -39,7 +44,7 @@ public class Usuario {
     private String login;
 
     @NotBlank(message = "Login ou senha invalidos")
-    @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
+    // @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
     @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
 
@@ -56,13 +61,52 @@ public class Usuario {
     }
 
     public Usuario(@Valid ValidaUsuarioDTO validaUsuarioDTO) {
-        if (validaUsuarioDTO.login() != null && !validaUsuarioDTO.login().isEmpty()){
+        if (validaUsuarioDTO.login() != null && !validaUsuarioDTO.login().isEmpty()) {
             this.login = validaUsuarioDTO.login().toLowerCase();
         }
-        if (validaUsuarioDTO.senha() != null && !validaUsuarioDTO.senha().isEmpty()){
+        if (validaUsuarioDTO.senha() != null && !validaUsuarioDTO.senha().isEmpty()) {
             this.senha = validaUsuarioDTO.senha();
         }
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
+
+    }
+
+    @Override
+    public String getPassword() {
+
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }
