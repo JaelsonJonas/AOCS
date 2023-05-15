@@ -23,11 +23,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "api/register").permitAll()
-                .requestMatchers(HttpMethod.POST, "api/login").permitAll().anyRequest()
+                .requestMatchers(HttpMethod.POST, "api/login").permitAll()
+                .anyRequest()
                 .authenticated()
                 .and()
                 .csrf().disable()
-                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .formLogin().disable()
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();

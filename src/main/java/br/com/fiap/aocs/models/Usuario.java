@@ -44,7 +44,7 @@ public class Usuario implements UserDetails {
     private String login;
 
     @NotBlank(message = "Login ou senha invalidos")
-    @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
+    // @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
     @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
 

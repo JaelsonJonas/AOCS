@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenService service;
+    TokenService service;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
