@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.fiap.aocs.DTO.ValidaUsuarioDTO;
+import br.com.fiap.aocs.DTO.UsuarioRegister;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,10 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,14 +33,9 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Login ou senha invalidos")
-    @Size(max = 50)
-    @Email
-    @Column(name = "DS_LOGIN", nullable = false, length = 50)
+    @Column(name = "DS_LOGIN", nullable = false, length = 50, unique = true)
     private String login;
 
-    @NotBlank(message = "Login ou senha invalidos")
-    // @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
     @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
 
@@ -56,23 +47,15 @@ public class Usuario implements UserDetails {
         this.senha = senha;
     }
 
-    public Usuario(String login) {
-        this.login = login;
-    }
-
-    public Usuario(@Valid ValidaUsuarioDTO validaUsuarioDTO) {
-        if (validaUsuarioDTO.login() != null && !validaUsuarioDTO.login().isEmpty()) {
-            this.login = validaUsuarioDTO.login().toLowerCase();
-        }
-        if (validaUsuarioDTO.senha() != null && !validaUsuarioDTO.senha().isEmpty()) {
-            this.senha = validaUsuarioDTO.senha();
-        }
+    public Usuario(UsuarioRegister register){
+        this.login = register.login();
+        this.senha = register.senha();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        return List.of(new SimpleGrantedAuthority("USER"));
 
     }
 

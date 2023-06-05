@@ -1,15 +1,16 @@
 package br.com.fiap.aocs.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.aocs.DTO.TarefaDTO;
+import br.com.fiap.aocs.DTO.TokenJWT;
 import br.com.fiap.aocs.DTO.UsuarioDTO;
-import br.com.fiap.aocs.DTO.ValidaUsuarioDTO;
+import br.com.fiap.aocs.DTO.UsuarioLogin;
+import br.com.fiap.aocs.DTO.UsuarioRegister;
 import br.com.fiap.aocs.exceptions.RestNotFoundException;
-import br.com.fiap.aocs.models.Credencial;
-import br.com.fiap.aocs.models.ReturnAPI;
 import br.com.fiap.aocs.models.Usuario;
 import br.com.fiap.aocs.repository.TarefaRepository;
 import br.com.fiap.aocs.repository.UsuarioRepository;
+import br.com.fiap.aocs.service.TokenService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -38,16 +40,18 @@ public class UsuarioController {
     private TarefaRepository tRepository;
 
     @Autowired
-    AuthenticationManager manager;
+    private AuthenticationManager manager;
 
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
+
+    @Autowired
+    private TokenService tokenService;
 
     @GetMapping("api/usuario")
-    public List<UsuarioDTO> getAllUsers() {
+    public Page<UsuarioDTO> getAllUsers(Pageable pageable) {
 
-        return repository.findAll().stream().map(n -> new UsuarioDTO(n.getLogin(), getTarefas(n.getId())))
-                .toList();
+        return repository.findAll(pageable).map(n -> new UsuarioDTO(n.getLogin(), getTarefas(n.getId())));
     }
 
     @GetMapping("api/usuario/{id}")
@@ -63,24 +67,11 @@ public class UsuarioController {
     }
 
     @PostMapping("api/register")
-    public ResponseEntity<Object> register(@RequestBody @Valid ValidaUsuarioDTO validaUsuarioDTO) {
+    public ResponseEntity<Object> register(@RequestBody @Valid UsuarioRegister post) {
 
-        // validar se o login ja existe, se sim retornar que não é possivel gerar esse
-        // login
-        ExampleMatcher em = ExampleMatcher.matching().withMatcher("DS_LOGIN",
-                usuario -> usuario.exact());
-        Example<Usuario> criterioDeBusca = Example.of(new Usuario(validaUsuarioDTO.login().toLowerCase()), em);
+        Usuario newUser = new Usuario(post);
 
-        Optional<Usuario> optUsr = repository.findOne(criterioDeBusca);
-
-        if (optUsr.isPresent()) {
-            return ResponseEntity.badRequest()
-                    .body(new ReturnAPI("Desculpe, login já em uso. Por favor, tente outro."));
-        }
-
-        Usuario newUser = new Usuario(validaUsuarioDTO);
-
-        newUser.setSenha(encoder.encode(newUser.getSenha()));
+        newUser.setSenha(encoder.encode(post.senha()));
 
         repository.save(newUser);
 
@@ -89,11 +80,16 @@ public class UsuarioController {
     }
 
     @PostMapping("api/login")
-    public ResponseEntity<Object> login(@RequestBody Credencial credencial) {
+    public ResponseEntity<TokenJWT> login(@RequestBody @Valid UsuarioLogin dados) {
 
-        manager.authenticate(credencial.toAuthentication());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(),
+                dados.senha());
 
-        return ResponseEntity.ok().build();
+        Authentication autentication = manager.authenticate(authenticationToken);
+
+        String tokenJWT = tokenService.gerarToken((Usuario) autentication.getPrincipal());
+
+        return ResponseEntity.ok(new TokenJWT(tokenJWT));
 
     }
 
