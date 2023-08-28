@@ -3,6 +3,7 @@ package br.com.fiap.aocs.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,20 +20,25 @@ public class SecurityConfig {
     @Autowired
     private AuthorizationFilter filter;
 
+    @Autowired
+    Environment env;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "api/register").permitAll()
-                .requestMatchers(HttpMethod.POST, "api/login").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable()
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+
+        http.csrf(csrf -> csrf.disable())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                        .requestMatchers(HttpMethod.POST, "api/register", "api/login").permitAll())
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+        if (env.getActiveProfiles().length > 0 && env.getActiveProfiles()[0].equals("dev")) {
+            http.authorizeHttpRequests().anyRequest().permitAll();
+        } else {
+            http.authorizeHttpRequests().anyRequest().authenticated();
+        }
+
+        return http.build();
     }
 
     @Bean

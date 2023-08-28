@@ -44,7 +44,7 @@ public class Tarefa {
     private String descricao;
 
     @NotNull
-    @FutureOrPresent(message = "Data deve ser futura")
+    // @FutureOrPresent(message = "Data deve ser futura")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "DT_TAREFA", nullable = false)
     private LocalDate data;
@@ -57,15 +57,6 @@ public class Tarefa {
     @JoinColumn(name = "ID_USUARIO")
     private Long idUsuario;
 
-    // public EntityModel<Tarefa> toEntityModel() {
-    //     return EntityModel.of(
-    //             this,
-    //             linkTo(methodOn(TarefaController.class).returnWithId(id)).withSelfRel(),
-    //             linkTo(methodOn(TarefaController.class).deleteWithId(id)).withRel("delete"),
-    //             linkTo(methodOn(TarefaController.class).index(null, Pageable.unpaged())).withRel("all"),
-    //             linkTo(methodOn(UsuarioController.class).returnWithId(this.getIdUsuario())).withRel("usuario")
-
-    //     );
-    // }
+  
 
 }
