@@ -21,11 +21,10 @@ public class SecurityConfig {
     private AuthorizationFilter filter;
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
@@ -33,9 +32,9 @@ public class SecurityConfig {
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         if (env.getActiveProfiles().length > 0 && env.getActiveProfiles()[0].equals("dev")) {
-            http.authorizeHttpRequests().anyRequest().permitAll();
+            http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().permitAll());
         } else {
-            http.authorizeHttpRequests().anyRequest().authenticated();
+            http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().authenticated());
         }
 
         return http.build();
