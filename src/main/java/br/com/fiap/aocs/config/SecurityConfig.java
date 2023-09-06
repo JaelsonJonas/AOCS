@@ -21,7 +21,7 @@ public class SecurityConfig {
     private AuthorizationFilter filter;
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,7 +38,8 @@ public class SecurityConfig {
             http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().authenticated());
         }
 
-        return http.build();    }
+        return http.build();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

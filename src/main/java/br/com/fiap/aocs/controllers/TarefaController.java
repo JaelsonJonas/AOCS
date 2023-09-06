@@ -1,11 +1,7 @@
 package br.com.fiap.aocs.controllers;
 
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -40,26 +36,23 @@ public class TarefaController {
 
     @GetMapping
     public Page<TarefaDTO> index(@RequestParam(required = false) String titulo,
-            @PageableDefault(size = 2) Pageable pageable) {
+            @PageableDefault(size = 500) Pageable pageable) {
 
         if (titulo == null)
-            return repository.findAll(pageable).stream()
-                    .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()))
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), lista -> new PageImpl<>(lista,
-                            PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), lista.size())));
+            return repository.findAll(pageable)
+                    .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()));
 
-        return repository.findByTituloContaining(titulo, pageable).stream()
-                .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()))
-                .collect(Collectors.collectingAndThen(Collectors.toList(), lista -> new PageImpl<>(lista,
-                        PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), lista.size())));
+        return repository.findByTituloContaining(titulo, pageable)
+                .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()));
     }
 
     @PostMapping
     public ResponseEntity<TarefaDTO> create(@RequestBody @Valid Tarefa tarefa) {
 
         repository.save(tarefa);
-
-        return ResponseEntity.created(TarefaDTO.toEntityModel(tarefa).getRequiredLink("self").toUri()).body(new TarefaDTO(tarefa));
+        
+        return ResponseEntity.created(TarefaDTO.toEntityModel(tarefa).getRequiredLink("self").toUri())
+                .body(new TarefaDTO(tarefa));
 
     }
 
