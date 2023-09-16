@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/login")).permitAll())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
-        if (env.getActiveProfiles().length > 0 && env.getActiveProfiles()[0].equals("dev")) {
+        if (env.getActiveProfiles().length > 0 && env.getActiveProfiles()[0].equals("open")) {
             http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().permitAll());
         } else {
             http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.anyRequest().authenticated());
