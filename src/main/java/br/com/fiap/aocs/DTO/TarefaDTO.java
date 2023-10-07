@@ -14,13 +14,14 @@ import br.com.fiap.aocs.controllers.UsuarioController;
 import br.com.fiap.aocs.models.Tarefa;
 
 public record TarefaDTO(
+        Long id,
         String titulo,
         String descricao,
         LocalDate data,
         LocalTime duracao) {
 
     public TarefaDTO(Tarefa t) {
-        this(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao());
+        this(t.getId(),t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao());
     }
 
     public static EntityModel<TarefaDTO> toEntityModel(Tarefa t) {

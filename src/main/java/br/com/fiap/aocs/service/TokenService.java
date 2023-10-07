@@ -11,7 +11,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-import br.com.fiap.aocs.models.Credencial;
 import br.com.fiap.aocs.models.Token;
 import br.com.fiap.aocs.models.Usuario;
 import br.com.fiap.aocs.repository.UsuarioRepository;
@@ -26,10 +25,10 @@ public class TokenService {
     @Value("${jwt.secret}")
     String secret;
 
-    public Token generateToken( @Valid Credencial credencial){
+    public Token generateToken( @Valid Usuario credencial){
         Algorithm alg = Algorithm.HMAC256(secret);
         String token = JWT.create()
-                        .withSubject(credencial.email())
+                        .withSubject(credencial.getLogin())
                         .withIssuer("AOCS")
                         .withExpiresAt(Instant.now().plus(1,ChronoUnit.HOURS))
                         .sign(alg);

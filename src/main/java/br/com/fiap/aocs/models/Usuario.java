@@ -43,8 +43,15 @@ public class Usuario implements UserDetails {
     @Column(name = "DS_LOGIN", nullable = false, length = 50)
     private String login;
 
+    @NotBlank(message = "nome não pode ser vazio")
+    private String nome;
+
+    @NotBlank(message = "Foto esta vazia")
+    private String foto;
+
     @NotBlank(message = "Login ou senha invalidos")
-    // @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
+    // @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20
+    // caracteres")
     @Column(name = "DS_SENHA", nullable = false, length = 100)
     private String senha;
 
@@ -61,12 +68,11 @@ public class Usuario implements UserDetails {
     }
 
     public Usuario(@Valid ValidaUsuarioDTO validaUsuarioDTO) {
-        if (validaUsuarioDTO.login() != null && !validaUsuarioDTO.login().isEmpty()) {
-            this.login = validaUsuarioDTO.login().toLowerCase();
-        }
-        if (validaUsuarioDTO.senha() != null && !validaUsuarioDTO.senha().isEmpty()) {
-            this.senha = validaUsuarioDTO.senha();
-        }
+        this.nome = validaUsuarioDTO.nome();
+        this.login = validaUsuarioDTO.login();
+        this.senha = validaUsuarioDTO.senha();
+        this.foto = validaUsuarioDTO.foto();
+
     }
 
     @Override

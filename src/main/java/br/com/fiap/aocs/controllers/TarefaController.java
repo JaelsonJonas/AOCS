@@ -40,17 +40,17 @@ public class TarefaController {
 
         if (titulo == null)
             return repository.findAll(pageable)
-                    .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()));
+                    .map(t -> new TarefaDTO(t.getId(), t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()));
 
         return repository.findByTituloContaining(titulo, pageable)
-                .map(t -> new TarefaDTO(t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()));
+                .map(t -> new TarefaDTO(t.getId(), t.getTitulo(), t.getDescricao(), t.getData(), t.getDuracao()));
     }
 
     @PostMapping
     public ResponseEntity<TarefaDTO> create(@RequestBody @Valid Tarefa tarefa) {
 
         repository.save(tarefa);
-        
+
         return ResponseEntity.created(TarefaDTO.toEntityModel(tarefa).getRequiredLink("self").toUri())
                 .body(new TarefaDTO(tarefa));
 

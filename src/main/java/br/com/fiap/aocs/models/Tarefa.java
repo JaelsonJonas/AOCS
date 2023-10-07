@@ -1,10 +1,17 @@
 package br.com.fiap.aocs.models;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.EntityModel;
 
+import br.com.fiap.aocs.controllers.TarefaController;
+import br.com.fiap.aocs.controllers.UsuarioController;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -56,6 +63,15 @@ public class Tarefa {
     @JoinColumn(name = "ID_USUARIO")
     private Long idUsuario;
 
-  
+    public EntityModel<Tarefa> toEntityModel() {
+        return EntityModel.of(
+                this,
+                linkTo(methodOn(TarefaController.class).returnWithId(getId())).withSelfRel(),
+                linkTo(methodOn(TarefaController.class).deleteWithId(getId())).withRel("delete"),
+                linkTo(methodOn(TarefaController.class).index(null, Pageable.unpaged())).withRel("all"),
+                linkTo(methodOn(UsuarioController.class).returnWithId(getIdUsuario())).withRel("usuario")
+
+        );
+    }
 
 }

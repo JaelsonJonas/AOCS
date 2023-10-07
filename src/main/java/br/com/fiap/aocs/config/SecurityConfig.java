@@ -28,8 +28,9 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers(new AntPathRequestMatcher("/api/register")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/login")).permitAll())
+                        .requestMatchers(new AntPathRequestMatcher("/api/image/upload", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/login", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/register", "POST")).permitAll())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         if (env.getActiveProfiles().length > 0 && env.getActiveProfiles()[0].equals("open")) {

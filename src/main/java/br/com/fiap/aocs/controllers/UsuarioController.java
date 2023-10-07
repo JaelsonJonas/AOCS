@@ -10,6 +10,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +25,11 @@ import br.com.fiap.aocs.DTO.ValidaUsuarioDTO;
 import br.com.fiap.aocs.exceptions.RestNotFoundException;
 import br.com.fiap.aocs.models.Credencial;
 import br.com.fiap.aocs.models.ReturnAPI;
+import br.com.fiap.aocs.models.Token;
 import br.com.fiap.aocs.models.Usuario;
 import br.com.fiap.aocs.repository.TarefaRepository;
 import br.com.fiap.aocs.repository.UsuarioRepository;
+import br.com.fiap.aocs.service.TokenService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -41,12 +45,16 @@ public class UsuarioController {
     AuthenticationManager manager;
 
     @Autowired
+    TokenService tokenService;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @GetMapping("api/usuario")
     public List<UsuarioDTO> getAllUsers() {
 
-        return repository.findAll().stream().map(n -> new UsuarioDTO(n.getLogin(), getTarefas(n.getId())))
+        return repository.findAll().stream()
+                .map(n -> new UsuarioDTO(n.getNome(), n.getLogin(), n.getFoto(), getTarefas(n.getId())))
                 .toList();
     }
 
@@ -57,7 +65,7 @@ public class UsuarioController {
 
         List<TarefaDTO> tarefas = getTarefas(id);
 
-        UsuarioDTO dto = new UsuarioDTO(login.getLogin(), tarefas);
+        UsuarioDTO dto = new UsuarioDTO(login.getNome(), login.getLogin(), login.getFoto(), tarefas);
 
         return dto.toEntityModel(login, dto);
     }
@@ -89,11 +97,16 @@ public class UsuarioController {
     }
 
     @PostMapping("api/login")
-    public ResponseEntity<Object> login(@RequestBody Credencial credencial) {
+    public ResponseEntity<Token> login(@RequestBody @Valid Credencial credencial) {
 
-        manager.authenticate(credencial.toAuthentication());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                credencial.login(), credencial.senha());
 
-        return ResponseEntity.ok().build();
+        Authentication authenticate = manager.authenticate(usernamePasswordAuthenticationToken);
+
+        Token generateToken = tokenService.generateToken((Usuario) authenticate.getPrincipal());
+
+        return ResponseEntity.ok(generateToken);
 
     }
 
